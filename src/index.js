@@ -1,7 +1,11 @@
-require('../src/config/db');
+require('./configs/db');
 
 const express = require('express');
 const bodyParser = require('body-parser');
+
+const routes = require('./routes/index');
+const accessControl = require('./middlewares/access-control');
+const errorMiddleware = require('./middlewares/errors');
 
 const app = express();
 
@@ -9,14 +13,9 @@ const app = express();
 app.use(bodyParser.json());
 
 // configuring for cors error
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader(
-    'Access-Control-Allow-Methods',
-    'GET, POST, PUT, DELETE, PATCH'
-  );
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  next();
-});
+app.use(accessControl);
+
+app.use(routes);
+app.use(errorMiddleware);
 
 module.exports = app;
