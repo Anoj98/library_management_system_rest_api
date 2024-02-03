@@ -5,6 +5,12 @@ const bcrypt = require('bcryptjs');
 
 exports.signup = async (req, res, next) => {
   const errors = validationResult(req);
+  const userType = req.userType;
+  if (userType !== 'Admin') {
+    const error = new Error('Not Authorized');
+    error.statusCode = 403;
+    return next(error);
+  }
   if (!errors.isEmpty()) {
     const error = new Error('Validation error in creating a user.');
     error.statusCode = 422;

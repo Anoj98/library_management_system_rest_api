@@ -20,8 +20,12 @@ router.put(
         }
       })
       .normalizeEmail(),
-    body('password').trim().isLength({ min: 5 }).withMessage('Please add valid password.'),
+    body('password')
+      .trim()
+      .isLength({ min: 5 })
+      .withMessage('Please add valid password.'),
   ],
+  isAuth,
   userController.signup
 );
 

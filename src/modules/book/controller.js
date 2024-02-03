@@ -58,16 +58,16 @@ exports.deletebook = async (req, res, next) => {
     error.statusCode = 403;
     return next(error);
   }
-  
+
   try {
     const book = await Book.findByIdAndDelete(bookId);
-    console.log(book);
     if (!book) {
       const error = new Error("Can't find a book with this id.");
       error.statusCode = 422;
       throw error;
     }
     res.status(200).json({ message: 'The book is deleted.' });
+    console.log('The book is deleted.');
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
