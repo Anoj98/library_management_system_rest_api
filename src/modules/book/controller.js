@@ -2,6 +2,12 @@ const Book = require('./model');
 const { validationResult } = require('express-validator');
 
 exports.createBook = async (req, res, next) => {
+  const userType = req.userType;
+  if (userType !== 'Admin') {
+    const error = new Error('Not Authorized');
+    error.statusCode = 403;
+    return next(error);
+  }
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const error = new Error('validation error in creating a book.');
@@ -14,6 +20,8 @@ exports.createBook = async (req, res, next) => {
   const availableCopies = req.body.availableCopies;
 
   try {
+    // prevent Same book creating
+
     // const isSame = await Book.findOne({ name: name });
     // console.log(isSame);
     // if (isSame) {
@@ -44,7 +52,13 @@ exports.createBook = async (req, res, next) => {
 
 exports.deletebook = async (req, res, next) => {
   const bookId = req.params.bookId;
-  console.log(bookId);
+  const userType = req.userType;
+  if (userType !== 'Admin') {
+    const error = new Error('Not Authorized');
+    error.statusCode = 403;
+    return next(error);
+  }
+  
   try {
     const book = await Book.findByIdAndDelete(bookId);
     console.log(book);

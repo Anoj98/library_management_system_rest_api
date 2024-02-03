@@ -3,6 +3,7 @@ const router = express.Router();
 const { body } = require('express-validator');
 
 const bookController = require('./controller');
+const isAuth = require('../../middlewares/isAuth');
 
 router.post(
   '/create',
@@ -11,10 +12,11 @@ router.post(
     body('totalCopies').trim().isNumeric(),
     body('availableCopies').trim().isNumeric(),
   ],
+  isAuth,
   bookController.createBook
 );
 
-router.delete('/delete-book/:bookId', bookController.deletebook);
+router.delete('/delete-book/:bookId', isAuth, bookController.deletebook);
 
 router.get('/all-books', bookController.getbooks);
 

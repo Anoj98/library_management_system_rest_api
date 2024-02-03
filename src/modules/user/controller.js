@@ -44,6 +44,12 @@ exports.signup = async (req, res, next) => {
 };
 
 exports.deleteUser = async (req, res, next) => {
+  const userType = req.userType;
+  if (userType !== 'Admin') {
+    const error = new Error('Not Authorized');
+    error.statusCode = 403;
+    return next(error);
+  }
   try {
     const userId = req.body._id;
     const user = await User.findById(userId);
