@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 exports.signup = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    const error = new Error('Validation error.');
+    const error = new Error('Validation error in creating a user.');
     error.statusCode = 422;
     error.data = errors.array();
     return next(error);
@@ -49,7 +49,7 @@ exports.deleteUser = async (req, res, next) => {
     const user = await User.findById(userId);
     const authResult = await Auth.findOneAndDelete({ emailId: user.authId });
     if (!authResult) {
-      const error = new Error('Failed to delete a user.');      
+      const error = new Error('Failed to delete a user.');
       throw error;
     }
     await user.deleteOne();
@@ -58,8 +58,8 @@ exports.deleteUser = async (req, res, next) => {
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
-      console.error('Failed to delete a user.');
-      next(err);
     }
+    console.error('Failed to delete a user.');
+    next(err);
   }
 };

@@ -8,12 +8,11 @@ exports.login = async (req, res, next) => {
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    const error = new Error('Validation error.');
+    const error = new Error('Validation error in authenticating a user.');
     error.statusCode = 422;
     error.data = errors.array();
     return next(error);
   }
-
   try {
     const auth = await Auth.findOne({ emailId: email });
     console.log(auth);
@@ -22,16 +21,13 @@ exports.login = async (req, res, next) => {
       error.statusCode = 401;
       throw error;
     }
-
     const paswordCheck = await bcrypt.compare(password, auth.password);
-    
-    if (!paswordCheck) {
 
+    if (!paswordCheck) {
       const error = new Error('Password not matching with the email.');
       error.statusCode = 401;
       throw error;
     }
-
     res.status(200).json({ message: 'You have loged in successfully.' });
     console.log('You have loged in successfully.');
   } catch (err) {

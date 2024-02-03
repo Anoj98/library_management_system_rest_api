@@ -15,7 +15,10 @@ app.use(bodyParser.json());
 // configuring for cors error
 app.use(accessControl);
 
+// all the routes for modules
 app.use(routes);
+
+// route for error middleware
 app.use(errorMiddleware);
 
 module.exports = app;
