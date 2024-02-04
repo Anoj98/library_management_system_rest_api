@@ -3,16 +3,22 @@ const Schema = mongoose.Schema;
 
 const borrowingSchema = new Schema({
   user: {
-    _id: Schema.Types.ObjectId,
-    ref: 'User',
-    name: String,
+    _id: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+    name: { type: String, required: true },
   },
   book: {
-    _id: Schema.Types.ObjectId,
-    ref: 'Book',
-    name: String,
+    _id: {
+      type: Schema.Types.ObjectId,
+      ref: 'Book',
+      required: true,
+    },
+    name: { type: String, required: true },
   },
-  isReturned: Boolean,
+  isReturned: { type: Boolean, required: true },
 });
 
-module.exports = mongoose.model('Borrowings', borrowingSchema);
+module.exports = mongoose.model('Borrowing', borrowingSchema);

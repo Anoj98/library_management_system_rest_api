@@ -9,9 +9,10 @@ const isAuth = require('../../middlewares/isAuth');
 router.put(
   '/signup',
   [
-    body('name').trim().not().isEmpty(),
+    body('name').trim().notEmpty(),
     body('email')
       .isEmail()
+      .notEmpty()
       .withMessage('Please add valid email.')
       .custom(async (value, { req }) => {
         const userDoc = await User.findOne({ authId: value });
@@ -21,6 +22,7 @@ router.put(
       })
       .normalizeEmail(),
     body('password')
+      .notEmpty()
       .trim()
       .isLength({ min: 5 })
       .withMessage('Please add valid password.'),

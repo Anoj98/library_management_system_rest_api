@@ -8,10 +8,10 @@ router.post(
   '/login',
   [
     body('email')
-      .isEmail()
+      .isEmail().notEmpty()
       .withMessage('Enter a valid E-mail.')
       .normalizeEmail(),
-    body('password').trim(),
+    body('password').trim().notEmpty(),
   ],
   authController.login
 );

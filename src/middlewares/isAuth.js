@@ -23,6 +23,10 @@ module.exports = (req, res, next) => {
     error.statusCode = 401;
     throw error;
   }
-  req.userType = decodedToken.type;
+  req.user = {
+    //type: decodedToken.type,
+    userId: decodedToken._id,
+    name: decodedToken.name,
+  };
   next();
 };

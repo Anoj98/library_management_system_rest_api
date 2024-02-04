@@ -8,9 +8,19 @@ const isAuth = require('../../middlewares/isAuth');
 router.post(
   '/create',
   [
-    body('name').trim().not().isEmpty(),
-    body('totalCopies').trim().isNumeric(),
-    body('availableCopies').trim().isNumeric(),
+    body('name').trim().notEmpty(),
+    body('totalCopies')
+      .trim()
+      .isNumeric()
+      .notEmpty()
+      .custom((value) => parseInt(value, 10) !== 0)
+      .withMessage('The number cannot be zero'),
+    body('availableCopies')
+      .trim()
+      .isNumeric()
+      .notEmpty()
+      .custom((value) => parseInt(value, 10) !== 0)
+      .withMessage('The number cannot be zero'),
   ],
   isAuth,
   bookController.createBook
