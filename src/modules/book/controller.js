@@ -49,7 +49,9 @@ exports.createBook = async (req, res, next) => {
     // response only after saved the file
     if (createdBook) {
       console.log('The book saved.');
-      res.status(201).json({ message: 'The book saved.', bookId: createdBook._id });
+      res
+        .status(201)
+        .json({ message: 'The book saved.', bookId: createdBook._id });
     }
 
     // error handling
@@ -101,6 +103,14 @@ exports.deletebook = async (req, res, next) => {
 // fetch all the books
 exports.getbooks = async (req, res, next) => {
   try {
+    // check the authorization
+    const user = await User.findById(req.user.userId);    
+    if (!user) {
+      const error = new Error('Not Authorized.');
+      error.statusCode = 403;
+      throw error;
+    }
+
     // fetch books from the database
     const books = await Book.find();
     // check feched books

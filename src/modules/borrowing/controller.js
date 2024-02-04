@@ -214,17 +214,6 @@ exports.getAllBorrowings = async (req, res, next) => {
     // get all the borrowings from every user
     const allBorrowings = await Borrowing.find();
     // get list of active borrowings from all users
-    const activeBorrowings = await Borrowing.find({ isReturned: false });
-
-    // get all the user ids
-    // const allUsers = await User.find({type: 'User'});
-    // const newobject = allUsers.map(singleUser => {
-    //   return {
-    //     userId: singleUser._id
-    //   }
-    // });
-    // console.log(newobject);
-
     const borrowingsByUser = allBorrowings.reduce((acc, borrowing) => {
       const userId = borrowing.user._id;
     

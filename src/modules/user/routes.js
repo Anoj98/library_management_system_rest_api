@@ -26,8 +26,7 @@ router.put(
       .trim()
       .isLength({ min: 5 })
       .withMessage('Please add valid password.'),
-  ],
-  isAuth,
+  ],  
   userController.signup
 );
 

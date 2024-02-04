@@ -28,6 +28,6 @@ router.post(
 
 router.delete('/delete-book/:bookId', isAuth, bookController.deletebook);
 
-router.get('/all-books', bookController.getbooks);
+router.get('/all-books', isAuth, bookController.getbooks);
 
 module.exports = router;

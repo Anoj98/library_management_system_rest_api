@@ -5,30 +5,21 @@ const bcrypt = require('bcryptjs');
 
 // signup users only by regular users
 exports.signup = async (req, res, next) => {
+  // chack validations of the input values
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation error in creating a user.');
+    error.statusCode = 422;
+    error.data = errors.array();
+    next(error);
+  }
+
+  const name = req.body.name;
+  const email = req.body.email;
+  const password = req.body.password;
+  const type = 'User';
+
   try {
-    // check the authorization
-    const user = await User.findById(req.user.userId);
-    const userType = user.type;
-    if (userType !== 'Admin') {
-      const error = new Error('Not Authorized.');
-      error.statusCode = 403;
-      throw error;
-    }
-
-    // chack validations of the input values
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      const error = new Error('Validation error in creating a user.');
-      error.statusCode = 422;
-      error.data = errors.array();
-      throw error;
-    }
-
-    const name = req.body.name;
-    const email = req.body.email;
-    const password = req.body.password;
-    const type = 'User';
-
     // hashed the password
     const hashedPW = await bcrypt.hash(password, 12);
     // create new auth
@@ -58,7 +49,7 @@ exports.signup = async (req, res, next) => {
     });
     console.log('Successfully created a user.');
 
-    // error handling 
+    // error handling
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -96,7 +87,9 @@ exports.deleteUser = async (req, res, next) => {
     const deletedOne = await selectedUser.deleteOne();
 
     // response
-    res.status(200).json({ message: 'Successfully deleted a user.', deleted: deletedOne });
+    res
+      .status(200)
+      .json({ message: 'Successfully deleted a user.', deleted: deletedOne._id });
     console.log('Successfully deleted a user.');
 
     // error handling
